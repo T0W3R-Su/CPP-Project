@@ -29,7 +29,48 @@ void ExecutorImpl::Execute(const std::string& instruction) noexcept
             case 'W':
                 pose.x--;
                 break;
+            default:
+                break;
             }
+            break;
+        case 'L':
+            switch (pose.heading) {
+            case 'N':
+                pose.heading = 'W';
+                break;
+            case 'E':
+                pose.heading = 'N';
+                break;
+            case 'S':
+                pose.heading = 'E';
+                break;
+            case 'W':
+                pose.heading = 'S';
+                break;
+            default:
+                break;
+            }
+            break;
+        case 'R':
+            switch (pose.heading) {
+            case 'N':
+                pose.heading = 'E';
+                break;
+            case 'E':
+                pose.heading = 'S';
+                break;
+            case 'S':
+                pose.heading = 'W';
+                break;
+            case 'W':
+                pose.heading = 'N';
+                break;
+            default:
+                break;
+            }
+            break;
+        default:
+            break;
         }
     }
 }
