@@ -1,5 +1,7 @@
 #include "ExecutorImpl.hpp"
 
+#include <memory>
+
 namespace adas
 {
 Executor* Executor::NewExecutor(const Pose& initialPose) noexcept
@@ -74,18 +76,26 @@ void ExecutorImpl::TurnRight(void) noexcept
 void ExecutorImpl::Execute(const std::string& instruction) noexcept
 {
     for (const auto ins : instruction) {
+        // 使用继承和虚函数的方式，实现了多态
+        
+        std::unique_ptr<ICommand> inst;
+
         switch (ins) {
         case 'M':
-            Move();
+            inst = std::make_unique<MoveInstruction>();
             break;
         case 'L':
-            TurnLeft();
+            inst = std::make_unique<TurnLeftInstruction>();
             break;
         case 'R':
-            TurnRight();
+            inst = std::make_unique<TurnRightInstruction>();
             break;
         default:
             break;
+        }
+
+        if (inst) {
+            inst->DoOperate(*this);
         }
     }
 }
