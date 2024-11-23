@@ -73,11 +73,21 @@ void ExecutorImpl::TurnRight(void) noexcept
     }
 }
 
+void ExecutorImpl::FastMove(void) noexcept
+{
+    fastMoveFlag = !fastMoveFlag;
+}
+
+bool ExecutorImpl::IsFastMove(void) const noexcept
+{
+    return fastMoveFlag;
+}
+
 void ExecutorImpl::Execute(const std::string& instruction) noexcept
 {
     for (const auto ins : instruction) {
         // 使用继承和虚函数的方式，实现了多态
-        
+
         std::unique_ptr<ICommand> inst;
 
         switch (ins) {
@@ -89,6 +99,9 @@ void ExecutorImpl::Execute(const std::string& instruction) noexcept
             break;
         case 'R':
             inst = std::make_unique<TurnRightInstruction>();
+            break;
+        case 'F':
+            inst = std::make_unique<FastMoveInstruction>();
             break;
         default:
             break;

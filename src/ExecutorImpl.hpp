@@ -17,6 +17,7 @@ public:
 
 private:
     Pose pose;
+    bool fastMoveFlag = false;
 
 private:
     // 虚基类，定义了所有的指令
@@ -33,6 +34,10 @@ private:
     public:
         void DoOperate(ExecutorImpl& executor) const noexcept
         {
+            if (executor.IsFastMove()) {
+                executor.Move();
+            }
+
             executor.Move();
         }
     };
@@ -43,6 +48,10 @@ private:
     public:
         void DoOperate(ExecutorImpl& executor) const noexcept
         {
+            if (executor.IsFastMove()) {
+                executor.Move();
+            }
+
             executor.TurnLeft();
         }
     };
@@ -53,7 +62,21 @@ private:
     public:
         void DoOperate(ExecutorImpl& executor) const noexcept
         {
+            if (executor.IsFastMove()) {
+                executor.Move();
+            }
+
             executor.TurnRight();
+        }
+    };
+
+    // 快速移动类
+    class FastMoveInstruction final : public ICommand
+    {
+    public:
+        void DoOperate(ExecutorImpl& executor) const noexcept
+        {
+            executor.FastMove();
         }
     };
 
@@ -61,5 +84,7 @@ private:
     void Move(void) noexcept;
     void TurnLeft(void) noexcept;
     void TurnRight(void) noexcept;
+    void FastMove(void) noexcept;
+    bool IsFastMove(void) const noexcept;
 };
 }  // namespace adas
