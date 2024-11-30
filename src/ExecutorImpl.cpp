@@ -1,6 +1,7 @@
 #include "ExecutorImpl.hpp"
 
 #include <memory>
+#include <unordered_map>
 
 #include "Instruction.hpp"
 
@@ -17,30 +18,18 @@ ExecutorImpl::ExecutorImpl(const Pose& initialPose) noexcept : poseHandler(initi
 
 void ExecutorImpl::Execute(const std::string& instruction) noexcept
 {
-    for (const auto ins : instruction) {
-        // 使用继承和虚函数的方式，实现了多态
+    // 指令映射，表驱动提升可拓展性
+    std::unordered_map<char, std::unique_ptr<ICommand>> instructionMap;
+    instructionMap.emplace('M', std::make_unique<MoveInstruction>());
+    instructionMap.emplace('L', std::make_unique<TurnLeftInstruction>());
+    instructionMap.emplace('R', std::make_unique<TurnRightInstruction>());
+    instructionMap.emplace('F', std::make_unique<FastMoveInstruction>());
 
-        std::unique_ptr<ICommand> inst;
+    for (const auto& ins : instruction) {
+        const auto& iter = instructionMap.find(ins);
 
-        switch (ins) {
-        case 'M':
-            inst = std::make_unique<MoveInstruction>();
-            break;
-        case 'L':
-            inst = std::make_unique<TurnLeftInstruction>();
-            break;
-        case 'R':
-            inst = std::make_unique<TurnRightInstruction>();
-            break;
-        case 'F':
-            inst = std::make_unique<FastMoveInstruction>();
-            break;
-        default:
-            break;
-        }
-
-        if (inst) {
-            inst->DoOperate(poseHandler);
+        if (iter != instructionMap.end()) {
+            iter->second->DoOperate(poseHandler);
         }
     }
 }
