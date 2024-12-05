@@ -19,17 +19,25 @@ ExecutorImpl::ExecutorImpl(const Pose& initialPose) noexcept : poseHandler(initi
 void ExecutorImpl::Execute(const std::string& instruction) noexcept
 {
     // 指令映射，表驱动提升可拓展性
-    std::unordered_map<char, std::unique_ptr<ICommand>> instructionMap;
-    instructionMap.emplace('M', std::make_unique<MoveInstruction>());
-    instructionMap.emplace('L', std::make_unique<TurnLeftInstruction>());
-    instructionMap.emplace('R', std::make_unique<TurnRightInstruction>());
-    instructionMap.emplace('F', std::make_unique<FastMoveInstruction>());
+    std::unordered_map<char, std::function<void(PoseHandler & poseHandler)>> instructionMap;
+
+    MoveInstruction moveInstruction;
+    instructionMap.emplace('M', moveInstruction.operate);
+
+    TurnLeftInstruction turnLeftInstruction;
+    instructionMap.emplace('L', turnLeftInstruction.operate);
+
+    TurnRightInstruction turnRightInstruction;
+    instructionMap.emplace('R', turnRightInstruction.operate);
+
+    FastMoveInstruction fastMoveInstruction;
+    instructionMap.emplace('F', fastMoveInstruction.operate);
 
     for (const auto& ins : instruction) {
         const auto& iter = instructionMap.find(ins);
 
         if (iter != instructionMap.end()) {
-            iter->second->DoOperate(poseHandler);
+            iter->second(poseHandler);
         }
     }
 }

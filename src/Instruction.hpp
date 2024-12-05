@@ -1,5 +1,6 @@
 #pragma once
 #include "PoseHandler.hpp"
+#include "functional"
 
 namespace adas
 {
@@ -12,55 +13,51 @@ public:
 };
 
 // 移动类
-class MoveInstruction final : public ICommand
+class MoveInstruction final
 {
 public:
-    void DoOperate(PoseHandler& poseHandler) const noexcept
-    {
+    const std::function<void(PoseHandler& poseHandler)> operate = [](PoseHandler& poseHandler) noexcept {
         if (poseHandler.IsFastMove()) {
             poseHandler.Move();
         }
 
         poseHandler.Move();
-    }
+    };
 };
 
 // 左转类
-class TurnLeftInstruction final : public ICommand
+class TurnLeftInstruction final
 {
 public:
-    void DoOperate(PoseHandler& poseHandler) const noexcept
-    {
+    const std::function<void(PoseHandler& poseHandler)> operate = [](PoseHandler& poseHandler) noexcept {
         if (poseHandler.IsFastMove()) {
             poseHandler.Move();
         }
 
         poseHandler.TurnLeft();
-    }
+    };
 };
 
 // 右转类
-class TurnRightInstruction final : public ICommand
+class TurnRightInstruction final
 {
 public:
-    void DoOperate(PoseHandler& poseHandler) const noexcept
-    {
+    const std::function<void(PoseHandler& poseHandler)> operate = [](PoseHandler& poseHandler) noexcept {
         if (poseHandler.IsFastMove()) {
             poseHandler.Move();
         }
 
         poseHandler.TurnRight();
-    }
+    };
 };
 
 // 快速移动类
-class FastMoveInstruction final : public ICommand
+class FastMoveInstruction final
 {
 public:
-    void DoOperate(PoseHandler& poseHandler) const noexcept
-    {
+    const std::function<void(PoseHandler& poseHandler)> operate = [](PoseHandler& poseHandler) noexcept {
         poseHandler.FastMove();
-    }
+    };
 };
 
 }  // namespace adas
