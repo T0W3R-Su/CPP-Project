@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "Instruction.hpp"
+#include "functional"
 
 namespace adas
 {
@@ -19,19 +20,12 @@ ExecutorImpl::ExecutorImpl(const Pose& initialPose) noexcept : poseHandler(initi
 void ExecutorImpl::Execute(const std::string& instruction) noexcept
 {
     // 指令映射，表驱动提升可拓展性
-    std::unordered_map<char, std::function<void(PoseHandler & poseHandler)>> instructionMap;
-
-    MoveInstruction moveInstruction;
-    instructionMap.emplace('M', moveInstruction.operate);
-
-    TurnLeftInstruction turnLeftInstruction;
-    instructionMap.emplace('L', turnLeftInstruction.operate);
-
-    TurnRightInstruction turnRightInstruction;
-    instructionMap.emplace('R', turnRightInstruction.operate);
-
-    FastMoveInstruction fastMoveInstruction;
-    instructionMap.emplace('F', fastMoveInstruction.operate);
+    std::unordered_map<char, std::function<void(PoseHandler & poseHandler)>> instructionMap{
+        {'M', MoveInstruction()},
+        {'L', TurnLeftInstruction()},
+        {'R', TurnRightInstruction()},
+        {'F', FastMoveInstruction()},
+    };
 
     for (const auto& ins : instruction) {
         const auto& iter = instructionMap.find(ins);

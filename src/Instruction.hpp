@@ -1,6 +1,5 @@
 #pragma once
 #include "PoseHandler.hpp"
-#include "functional"
 
 namespace adas
 {
@@ -16,7 +15,8 @@ public:
 class MoveInstruction final
 {
 public:
-    const std::function<void(PoseHandler& poseHandler)> operate = [](PoseHandler& poseHandler) noexcept {
+    void operator()(PoseHandler& poseHandler) const noexcept
+    {
         if (poseHandler.IsFastMove()) {
             poseHandler.Move();
         }
@@ -29,7 +29,8 @@ public:
 class TurnLeftInstruction final
 {
 public:
-    const std::function<void(PoseHandler& poseHandler)> operate = [](PoseHandler& poseHandler) noexcept {
+    void operator()(PoseHandler& poseHandler) const noexcept
+    {
         if (poseHandler.IsFastMove()) {
             poseHandler.Move();
         }
@@ -42,7 +43,8 @@ public:
 class TurnRightInstruction final
 {
 public:
-    const std::function<void(PoseHandler& poseHandler)> operate = [](PoseHandler& poseHandler) noexcept {
+    void operator()(PoseHandler& poseHandler) const noexcept
+    {
         if (poseHandler.IsFastMove()) {
             poseHandler.Move();
         }
@@ -55,7 +57,8 @@ public:
 class FastMoveInstruction final
 {
 public:
-    const std::function<void(PoseHandler& poseHandler)> operate = [](PoseHandler& poseHandler) noexcept {
+    void operator()(PoseHandler& poseHandler) const noexcept
+    {
         poseHandler.FastMove();
     };
 };
