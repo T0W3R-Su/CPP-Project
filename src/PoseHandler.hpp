@@ -3,12 +3,51 @@
 
 namespace adas
 {
+class Point final
+{
+private:
+    int x;
+    int y;
+
+public:
+    Point(const int x, const int y) noexcept;
+    Point(const Point &rhs) noexcept;
+    Point &operator=(const Point &rhs) noexcept;
+    Point &operator+=(const Point &rhs) noexcept;
+
+public:
+    int GetX(void) const noexcept;
+    int GetY(void) const noexcept;
+};
+
+class Direction final
+{
+private:
+    char heading;
+    unsigned index;
+
+public:
+    Direction(const unsigned index, const char heading) noexcept;
+
+public:
+    static const Direction &GetDirection(const char heading) noexcept;
+
+public:
+    const char GetHeading(void) const noexcept;
+
+public:
+    const Point &Move(void) const noexcept;
+    const Direction &TurnLeft(void) const noexcept;
+    const Direction &TurnRight(void) const noexcept;
+};
+
 class PoseHandler final
 {
     // 必须值
 private:
-    Pose pose;
+    Point point;
     bool fastMoveFlag = false;
+    const Direction *facing;
 
     // 初始化和销毁
 public:
@@ -26,4 +65,5 @@ public:
     bool IsFastMove(void) const noexcept;
     const Pose Query(void) const noexcept;
 };
+
 }  // namespace adas

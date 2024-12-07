@@ -2,7 +2,9 @@
 
 namespace adas
 {
-PoseHandler::PoseHandler(const Pose& pose) noexcept : pose(pose)
+// PoseHandler
+PoseHandler::PoseHandler(const Pose& pose) noexcept
+    : point(pose.x, pose.y), facing(&Direction::GetDirection(pose.heading))
 {
 }
 
@@ -12,62 +14,17 @@ PoseHandler::~PoseHandler()
 
 void PoseHandler::Move() noexcept
 {
-    switch (pose.heading) {
-    case 'N':
-        pose.y++;
-        break;
-    case 'E':
-        pose.x++;
-        break;
-    case 'S':
-        pose.y--;
-        break;
-    case 'W':
-        pose.x--;
-        break;
-    default:
-        break;
-    }
+    point += facing->Move();
 }
 
 void PoseHandler::TurnLeft() noexcept
 {
-    switch (pose.heading) {
-    case 'N':
-        pose.heading = 'W';
-        break;
-    case 'E':
-        pose.heading = 'N';
-        break;
-    case 'S':
-        pose.heading = 'E';
-        break;
-    case 'W':
-        pose.heading = 'S';
-        break;
-    default:
-        break;
-    }
+    facing = &(facing->TurnLeft());
 }
 
 void PoseHandler::TurnRight() noexcept
 {
-    switch (pose.heading) {
-    case 'N':
-        pose.heading = 'E';
-        break;
-    case 'E':
-        pose.heading = 'S';
-        break;
-    case 'S':
-        pose.heading = 'W';
-        break;
-    case 'W':
-        pose.heading = 'N';
-        break;
-    default:
-        break;
-    }
+    facing = &(facing->TurnRight());
 }
 
 void PoseHandler::FastMove() noexcept
@@ -80,9 +37,83 @@ bool PoseHandler::IsFastMove() const noexcept
     return fastMoveFlag;
 }
 
-const Pose PoseHandler::Query() const noexcept
+const Pose PoseHandler::Query(void) const noexcept
 {
-    return pose;
+    return {point.GetX(), point.GetY(), facing->GetHeading()};
+}
+
+// Direction
+static const Direction directions[4] = {{0, 'E'}, {1, 'S'}, {2, 'W'}, {3, 'N'}};
+
+Direction::Direction(const unsigned index, const char heading) noexcept
+{
+    this->index = index;
+    this->heading = heading;
+}
+
+const Direction& Direction::GetDirection(const char heading) noexcept
+{
+    for (const auto& direction : directions) {
+        if (direction.heading == heading) {
+            return direction;
+        }
+    }
+    return directions[3];
+}
+
+const char Direction::GetHeading(void) const noexcept
+{
+    return heading;
+}
+
+const Point& Direction::Move(void) const noexcept
+{
+    // ESWN
+    static const Point point[4] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
+    return point[index];
+}
+
+const Direction& Direction::TurnLeft(void) const noexcept
+{
+    return directions[(index + 3) % 4];
+}
+
+const Direction& Direction::TurnRight(void) const noexcept
+{
+    return directions[(index + 1) % 4];
+}
+
+// Point
+Point::Point(const int x, const int y) noexcept : x(x), y(y)
+{
+}
+
+Point::Point(const Point& rhs) noexcept : x(rhs.x), y(rhs.y)
+{
+}
+
+Point& Point::operator=(const Point& rhs) noexcept
+{
+    x = rhs.x;
+    y = rhs.y;
+    return *this;
+}
+
+Point& Point::operator+=(const Point& rhs) noexcept
+{
+    x += rhs.x;
+    y += rhs.y;
+    return *this;
+}
+
+int Point::GetX(void) const noexcept
+{
+    return x;
+}
+
+int Point::GetY(void) const noexcept
+{
+    return y;
 }
 
 }  // namespace adas
