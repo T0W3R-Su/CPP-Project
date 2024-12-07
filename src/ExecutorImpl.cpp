@@ -25,7 +25,7 @@ void ExecutorImpl::Execute(const std::string& instruction) noexcept
         {'L', TurnLeftInstruction()},
         {'R', TurnRightInstruction()},
         {'F', FastMoveInstruction()},
-    };
+        {'B', ReverseInstruction()}};
 
     for (const auto& ins : instruction) {
         const auto& iter = instructionMap.find(ins);

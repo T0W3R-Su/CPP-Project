@@ -35,7 +35,11 @@ public:
             poseHandler.Move();
         }
 
-        poseHandler.TurnLeft();
+        if (poseHandler.IsReverseMove()) {
+            poseHandler.TurnRight();
+        } else {
+            poseHandler.TurnLeft();
+        }
     };
 };
 
@@ -49,7 +53,11 @@ public:
             poseHandler.Move();
         }
 
-        poseHandler.TurnRight();
+        if (poseHandler.IsReverseMove()) {
+            poseHandler.TurnLeft();
+        } else {
+            poseHandler.TurnRight();
+        }
     };
 };
 
@@ -60,6 +68,16 @@ public:
     void operator()(PoseHandler& poseHandler) const noexcept
     {
         poseHandler.FastMove();
+    };
+};
+
+// 倒车类
+class ReverseInstruction final
+{
+public:
+    void operator()(PoseHandler& poseHandler) const noexcept
+    {
+        poseHandler.ReverseMove();
     };
 };
 

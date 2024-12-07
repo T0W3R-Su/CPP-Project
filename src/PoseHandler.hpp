@@ -14,6 +14,7 @@ public:
     Point(const Point &rhs) noexcept;
     Point &operator=(const Point &rhs) noexcept;
     Point &operator+=(const Point &rhs) noexcept;
+    Point &operator-=(const Point &rhs) noexcept;
 
 public:
     int GetX(void) const noexcept;
@@ -47,6 +48,7 @@ class PoseHandler final
 private:
     Point point;
     bool fastMoveFlag = false;
+    bool reverseMoveFlag = false;
     const Direction *facing;
 
     // 初始化和销毁
@@ -63,6 +65,8 @@ public:
     void TurnRight(void) noexcept;
     void FastMove(void) noexcept;
     bool IsFastMove(void) const noexcept;
+    void ReverseMove(void) noexcept;
+    bool IsReverseMove(void) const noexcept;
     const Pose Query(void) const noexcept;
 };
 
