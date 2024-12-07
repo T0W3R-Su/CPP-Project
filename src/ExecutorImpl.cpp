@@ -4,6 +4,8 @@
 #include <unordered_map>
 
 #include "Instruction.hpp"
+#include "InstructionFactory.hpp"
+#include "Singleton.hpp"
 #include "functional"
 
 namespace adas
@@ -19,21 +21,9 @@ ExecutorImpl::ExecutorImpl(const Pose& initialPose) noexcept : poseHandler(initi
 
 void ExecutorImpl::Execute(const std::string& instruction) noexcept
 {
-    // 指令映射，表驱动提升可拓展性
-    std::unordered_map<char, std::function<void(PoseHandler & poseHandler)>> instructionMap{
-        {'M', MoveInstruction()},
-        {'L', TurnLeftInstruction()},
-        {'R', TurnRightInstruction()},
-        {'F', FastMoveInstruction()},
-        {'B', ReverseInstruction()}};
+    const auto instructions = Singleton<InstructionFactory>::Instance().GetInstructions(instruction);
 
-    for (const auto& ins : instruction) {
-        const auto& iter = instructionMap.find(ins);
-
-        if (iter != instructionMap.end()) {
-            iter->second(poseHandler);
-        }
-    }
+    std::for_each(instructions.begin(), instructions.end(), [this](const Instruction& ins) { ins(poseHandler); });
 }
 
 const Pose ExecutorImpl::Query(void) const noexcept

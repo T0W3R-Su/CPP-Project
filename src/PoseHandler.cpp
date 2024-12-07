@@ -14,10 +14,9 @@ PoseHandler::~PoseHandler()
 
 void PoseHandler::Move() noexcept
 {
-    if (reverseFlag) {
+    if (reverseMoveFlag) {
         point -= facing->Move();
-    }
-    else {
+    } else {
         point += facing->Move();
     }
 }
@@ -44,7 +43,7 @@ bool PoseHandler::IsFastMove() const noexcept
 
 void PoseHandler::ReverseMove(void) noexcept
 {
-    reverseFlag = !reverseFlag;
+    reverseMoveFlag = !reverseMoveFlag;
 }
 
 bool PoseHandler::IsReverseMove(void) const noexcept
