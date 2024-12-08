@@ -60,12 +60,15 @@ public:
 
     // 指令函数
 public:
-    void Move(void) noexcept;
+    void Forward(void) noexcept;
+    void Backward(void) noexcept;
     void TurnLeft(void) noexcept;
+    void ReverseTurnLeft(void) noexcept;
     void TurnRight(void) noexcept;
-    void FastMove(void) noexcept;
+    void ReverseTurnRight(void) noexcept;
+    void BeFast() noexcept;
     bool IsFastMove(void) const noexcept;
-    void ReverseMove(void) noexcept;
+    void BeReverse(void) noexcept;
     bool IsReverseMove(void) const noexcept;
     const Pose Query(void) const noexcept;
 };

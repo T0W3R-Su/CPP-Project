@@ -12,13 +12,14 @@ PoseHandler::~PoseHandler()
 {
 }
 
-void PoseHandler::Move() noexcept
+void PoseHandler::Forward() noexcept
 {
-    if (reverseMoveFlag) {
-        point -= facing->Move();
-    } else {
-        point += facing->Move();
-    }
+    point += facing->Move();
+}
+
+void PoseHandler::Backward() noexcept
+{
+    point -= facing->Move();
 }
 
 void PoseHandler::TurnLeft() noexcept
@@ -26,12 +27,22 @@ void PoseHandler::TurnLeft() noexcept
     facing = &(facing->TurnLeft());
 }
 
+void PoseHandler::ReverseTurnLeft() noexcept
+{
+    facing = &(facing->TurnRight());
+}
+
 void PoseHandler::TurnRight() noexcept
 {
     facing = &(facing->TurnRight());
 }
 
-void PoseHandler::FastMove() noexcept
+void PoseHandler::ReverseTurnRight() noexcept
+{
+    facing = &(facing->TurnLeft());
+}
+
+void PoseHandler::BeFast() noexcept
 {
     fastMoveFlag = !fastMoveFlag;
 }
@@ -41,7 +52,7 @@ bool PoseHandler::IsFastMove() const noexcept
     return fastMoveFlag;
 }
 
-void PoseHandler::ReverseMove(void) noexcept
+void PoseHandler::BeReverse(void) noexcept
 {
     reverseMoveFlag = !reverseMoveFlag;
 }

@@ -19,11 +19,12 @@ ExecutorImpl::ExecutorImpl(const Pose& initialPose) noexcept : poseHandler(initi
 {
 }
 
-void ExecutorImpl::Execute(const std::string& instruction) noexcept
+void ExecutorImpl::Execute(const std::string& ins) noexcept
 {
-    const auto instructions = Singleton<InstructionFactory>::Instance().GetInstructions(instruction);
+    const auto instructions = Singleton<InstructionFactory>::Instance().GetInstructions(ins);
 
-    std::for_each(instructions.begin(), instructions.end(), [this](const Instruction& ins) { ins(poseHandler); });
+    std::for_each(instructions.begin(), instructions.end(),
+                  [this](const Instruction& instruction) { instruction(poseHandler).DoOperation(poseHandler); });
 }
 
 const Pose ExecutorImpl::Query(void) const noexcept
