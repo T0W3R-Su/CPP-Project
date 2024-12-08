@@ -8,9 +8,10 @@ class ExecutorImpl final : public Executor
 {
 private:
     PoseHandler poseHandler;
+    CarType carType;
     // 初始化和销毁
 public:
-    explicit ExecutorImpl(const Pose& initialPose) noexcept;
+    explicit ExecutorImpl(const Pose& initialPose, const CarType carType) noexcept;
     ~ExecutorImpl(void) noexcept = default;
     ExecutorImpl(const ExecutorImpl&) = delete;
     ExecutorImpl& operator=(const ExecutorImpl&) = delete;

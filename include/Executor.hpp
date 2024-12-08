@@ -3,6 +3,11 @@
 
 namespace adas  // 防止命名冲突，将所有的代码放在 adas 命名空间下
 {
+enum class CarType : uint16_t {
+    NormalCar = 0,
+    SportsCar,
+};
+
 struct Pose {  // 车辆的位置和朝向
     int x;
     int y;
@@ -12,7 +17,7 @@ struct Pose {  // 车辆的位置和朝向
 class Executor  // 抽象类，定义了 Executor 的接口，隐藏了具体的实现
 {
 public:
-    static Executor* NewExecutor(const Pose& initialPose = {0, 0, 'N'}) noexcept;
+    static Executor* NewExecutor(const Pose& initialPose = {0, 0, 'N'}, const CarType = CarType::NormalCar) noexcept;
     // 工厂方法，根据初始位置创建一个 Executor 对象，无需实例化
 
 public:

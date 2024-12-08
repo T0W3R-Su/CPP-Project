@@ -8,43 +8,44 @@
 
 namespace adas
 {
-using Instruction = std::function<ActionGroup(PoseHandler &poseHandler)>;
+using Instruction = std::function<ActionGroup(PoseHandler &poseHandler, CarType carType)>;
 using InstructionList = std::list<Instruction>;
 
 class InstructionFactory final
 {
     // 指令映射
 private:
-    const std::unordered_map<char, Instruction> instructionMap{{'M',
-                                                                [](PoseHandler &poseHandler) -> ActionGroup {
-                                                                    MoveInstruction moveInstruction;
-                                                                    return moveInstruction(poseHandler);
-                                                                }},
-                                                               {'L',
-                                                                [](PoseHandler &poseHandler) -> ActionGroup {
-                                                                    TurnLeftInstruction turnLeftInstruction;
-                                                                    return turnLeftInstruction(poseHandler);
-                                                                }},
-                                                               {'R',
-                                                                [](PoseHandler &poseHandler) -> ActionGroup {
-                                                                    TurnRightInstruction turnRightInstruction;
-                                                                    return turnRightInstruction(poseHandler);
-                                                                }},
-                                                               {'F',
-                                                                [](PoseHandler &poseHandler) -> ActionGroup {
-                                                                    FastMoveInstruction fastMoveInstruction;
-                                                                    return fastMoveInstruction(poseHandler);
-                                                                }},
-                                                               {'B',
-                                                                [](PoseHandler &poseHandler) -> ActionGroup {
-                                                                    ReverseInstruction reverseInstruction;
-                                                                    return reverseInstruction(poseHandler);
-                                                                }},
-                                                               {'Z',
-                                                                [](PoseHandler &poseHandler) -> ActionGroup {
-                                                                    TurnRoundInstruction turnRoundInstruction;
-                                                                    return turnRoundInstruction(poseHandler);
-                                                                }}
+    const std::unordered_map<char, Instruction> instructionMap{
+        {'M',
+         [](PoseHandler &poseHandler, CarType carType) -> ActionGroup {
+             MoveInstruction moveInstruction;
+             return moveInstruction(poseHandler, carType);
+         }},
+        {'L',
+         [](PoseHandler &poseHandler, CarType carType) -> ActionGroup {
+             TurnLeftInstruction turnLeftInstruction;
+             return turnLeftInstruction(poseHandler, carType);
+         }},
+        {'R',
+         [](PoseHandler &poseHandler, CarType carType) -> ActionGroup {
+             TurnRightInstruction turnRightInstruction;
+             return turnRightInstruction(poseHandler, carType);
+         }},
+        {'F',
+         [](PoseHandler &poseHandler, CarType carType) -> ActionGroup {
+             FastMoveInstruction fastMoveInstruction;
+             return fastMoveInstruction(poseHandler, carType);
+         }},
+        {'B',
+         [](PoseHandler &poseHandler, CarType carType) -> ActionGroup {
+             ReverseInstruction reverseInstruction;
+             return reverseInstruction(poseHandler, carType);
+         }},
+        {'Z',
+         [](PoseHandler &poseHandler, CarType carType) -> ActionGroup {
+             TurnRoundInstruction turnRoundInstruction;
+             return turnRoundInstruction(poseHandler, carType);
+         }}
 
     };  // 表驱动提升可拓展性
 

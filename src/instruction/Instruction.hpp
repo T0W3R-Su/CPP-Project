@@ -4,30 +4,26 @@
 
 namespace adas
 {
-// 虚基类，定义了所有的指令
-class ICommand
-{
-public:
-    virtual ~ICommand(void) noexcept = default;
-    virtual void DoOperate(PoseHandler& poseHandler) const noexcept = 0;
-};
-
 // 移动类
 class MoveInstruction final
 {
 public:
-    ActionGroup operator()(PoseHandler& poseHandler) const noexcept
+    ActionGroup operator()(PoseHandler& poseHandler, CarType carType) const noexcept
     {
         ActionGroup actionGroup;
+        int cnt = 1;
 
         const auto action =
             poseHandler.IsReverseMove() ? ActionType::BACKWARD_1_STEP_ACTION : ActionType::FORWARD_1_STEP_ACTION;
 
-        if (poseHandler.IsFastMove()) {
+        poseHandler.IsFastMove() ? cnt++ : cnt;
+
+        (carType == CarType::SportsCar) ? cnt *= 2 : cnt;
+
+        for (int i = 0; i < cnt; ++i) {
             actionGroup.PushAction(action);
         }
 
-        actionGroup.PushAction(action);
         return actionGroup;
     }
 };
@@ -36,7 +32,7 @@ public:
 class TurnLeftInstruction final
 {
 public:
-    ActionGroup operator()(PoseHandler& poseHandler) const noexcept
+    ActionGroup operator()(PoseHandler& poseHandler, CarType carType) const noexcept
     {
         ActionGroup actionGroup;
 
@@ -51,6 +47,13 @@ public:
 
         actionGroup.PushAction(action);
 
+        if (carType == CarType::SportsCar) {
+            const auto action =
+                poseHandler.IsReverseMove() ? ActionType::BACKWARD_1_STEP_ACTION : ActionType::FORWARD_1_STEP_ACTION;
+
+            actionGroup.PushAction(action);
+        }
+
         return actionGroup;
     }
 };
@@ -59,7 +62,7 @@ public:
 class TurnRightInstruction final
 {
 public:
-    ActionGroup operator()(PoseHandler& poseHandler) const noexcept
+    ActionGroup operator()(PoseHandler& poseHandler, CarType carType) const noexcept
     {
         ActionGroup actionGroup;
 
@@ -74,6 +77,13 @@ public:
 
         actionGroup.PushAction(action);
 
+        if (carType == CarType::SportsCar) {
+            const auto action =
+                poseHandler.IsReverseMove() ? ActionType::BACKWARD_1_STEP_ACTION : ActionType::FORWARD_1_STEP_ACTION;
+
+            actionGroup.PushAction(action);
+        }
+
         return actionGroup;
     }
 };
@@ -82,7 +92,7 @@ public:
 class FastMoveInstruction final
 {
 public:
-    ActionGroup operator()(PoseHandler& poseHandler) const noexcept
+    ActionGroup operator()(PoseHandler& poseHandler, CarType carType) const noexcept
     {
         ActionGroup actionGroup;
         actionGroup.PushAction(ActionType::BE_FAST_ACTION);
@@ -94,7 +104,7 @@ public:
 class ReverseInstruction final
 {
 public:
-    ActionGroup operator()(PoseHandler& poseHandler) const noexcept
+    ActionGroup operator()(PoseHandler& poseHandler, CarType carType) const noexcept
     {
         ActionGroup actionGroup;
         actionGroup.PushAction(ActionType::BE_REVERSE_ACTION);
@@ -106,7 +116,7 @@ public:
 class TurnRoundInstruction final
 {
 public:
-    ActionGroup operator()(PoseHandler& poseHandler) const noexcept
+    ActionGroup operator()(PoseHandler& poseHandler, CarType carType) const noexcept
     {
         ActionGroup actionGroup;
 
