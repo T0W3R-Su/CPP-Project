@@ -1,5 +1,6 @@
 #include "ExecutorImpl.hpp"
 
+#include <algorithm>
 #include <memory>
 #include <unordered_map>
 
