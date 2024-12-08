@@ -39,9 +39,19 @@ private:
                                                                 [](PoseHandler &poseHandler) -> ActionGroup {
                                                                     ReverseInstruction reverseInstruction;
                                                                     return reverseInstruction(poseHandler);
+                                                                }},
+                                                               {'Z',
+                                                                [](PoseHandler &poseHandler) -> ActionGroup {
+                                                                    TurnRoundInstruction turnRoundInstruction;
+                                                                    return turnRoundInstruction(poseHandler);
                                                                 }}
 
     };  // 表驱动提升可拓展性
+
+    // 解析指令
+private:
+    std::string ParseInstructionString(std::string_view instructions) const noexcept;
+    void ReplaceAll(std::string &inout, std::string_view what, std::string_view with) const noexcept;
 
     // 初始化和销毁
 public:

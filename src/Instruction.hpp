@@ -102,4 +102,28 @@ public:
     };
 };
 
+// 调头类
+class TurnRoundInstruction final
+{
+public:
+    ActionGroup operator()(PoseHandler& poseHandler) const noexcept
+    {
+        ActionGroup actionGroup;
+
+        // 如果是倒车状态，调头指令无效
+        if (poseHandler.IsReverseMove()) {
+            return ActionGroup();
+        }
+
+        // 如果是快速移动状态，调头指令为前进、左转、前进、左转
+        if (poseHandler.IsFastMove()) {
+            return ActionGroup({ActionType::FORWARD_1_STEP_ACTION, ActionType::TURN_LEFT_ACTION,
+                                ActionType::FORWARD_1_STEP_ACTION, ActionType::TURN_LEFT_ACTION});
+        }
+
+        // 如果是正常移动状态，调头指令为左转、前进、左转
+        return ActionGroup(
+            {ActionType::TURN_LEFT_ACTION, ActionType::FORWARD_1_STEP_ACTION, ActionType::TURN_LEFT_ACTION});
+    }
+};
 }  // namespace adas
