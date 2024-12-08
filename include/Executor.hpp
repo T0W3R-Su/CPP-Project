@@ -6,6 +6,7 @@ namespace adas  // 防止命名冲突，将所有的代码放在 adas 命名空�
 enum class CarType : uint16_t {
     NormalCar = 0,
     SportsCar,
+    Bus,
 };
 
 struct Pose {  // 车辆的位置和朝向

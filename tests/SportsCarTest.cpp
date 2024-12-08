@@ -138,7 +138,7 @@ TEST(SportsCarTest, should_return_N_and_y_minus_1_when_instruction_is_BR_and_hea
     ASSERT_EQ(executor->Query(), target);
 }
 
-TEST(SportsCarTest, should_return_x_plus_2_when_instruction_is_BBM_and_heading_is_N)
+TEST(SportsCarTest, should_return_y_plus_2_when_instruction_is_BBM_and_heading_is_N)
 {
     // Arrange
     std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'N'}, CarType::SportsCar));
